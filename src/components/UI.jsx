@@ -2,22 +2,22 @@ import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 
 const pictures = [
-  "DSC00680",
-  "DSC00933",
-  "DSC00966",
-  "DSC00983",
-  "DSC01011",
-  "DSC01040",
-  "DSC01064",
-  "DSC01071",
-  "DSC01103",
-  "DSC01145",
-  "DSC01420",
-  "DSC01461",
-  "DSC01489",
-  "DSC02031",
-  "DSC02064",
-  "DSC02069",
+  "cara_1",
+  "cara_2",
+  "cara_3",
+  "cara_4",
+  "cara_5",
+  "cara_6",
+  "cara_7",
+  "cara_8",
+  "cara_9",
+  "cara_10",
+  "cara_11",
+  "cara_12",
+  "cara_13",
+  "cara_14",
+  "cara_15",
+  "cara_16",
 ];
 
 export const pageAtom = atom(0);
