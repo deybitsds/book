@@ -68,20 +68,21 @@ pageGeometry.setAttribute(
 );
 
 const whiteColor = new Color("white");
+const agedPaperColor = new Color("#f5f0e0"); // Páginas ligeramente amarillentas
 const emissiveColor = new Color("orange");
 
 const pageMaterials = [
   new MeshStandardMaterial({
-    color: whiteColor,
+    color: agedPaperColor,
   }),
   new MeshStandardMaterial({
     color: "#111",
   }),
   new MeshStandardMaterial({
-    color: whiteColor,
+    color: agedPaperColor,
   }),
   new MeshStandardMaterial({
-    color: whiteColor,
+    color: agedPaperColor,
   }),
 ];
 

@@ -9,7 +9,10 @@ function App() {
     <>
       <UI />
       <Loader />
-      <Canvas shadows camera={{
+      <Canvas
+        gl={{ alpha: true, antialias: true }}
+        shadows
+        camera={{
           position: [-0.5, 1, window.innerWidth > 800 ? 4 : 9],
           fov: 45,
         }}>
