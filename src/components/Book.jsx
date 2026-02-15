@@ -138,7 +138,9 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
               roughnessMap: pictureRoughness,
             }
           : {
-              roughness: 0.1,
+              roughness: 0.9,
+              metalness: 0,
+              envMapIntensity: 0.2,
             }),
         emissive: emissiveColor,
         emissiveIntensity: 0,
@@ -151,7 +153,9 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
               roughnessMap: pictureRoughness,
             }
           : {
-              roughness: 0.1,
+              roughness: 0.9,
+              metalness: 0,
+              envMapIntensity: 0.2,
             }),
         emissive: emissiveColor,
         emissiveIntensity: 0,
