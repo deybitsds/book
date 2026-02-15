@@ -1,4 +1,5 @@
-import { useCursor, useTexture } from "@react-three/drei";
+import { useCursor } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { easing } from "maath";
@@ -17,6 +18,7 @@ import {
   Vector3,
 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
+import { CompositeTextureLoader } from "../loaders/CompositeTextureLoader";
 import { pageAtom, pages } from "./UI";
 
 const easingFactor = 0.5; // Controls the speed of the easing
@@ -87,19 +89,22 @@ const pageMaterials = [
 ];
 
 pages.forEach((page) => {
-  useTexture.preload(`/textures/${page.front}.jpg`);
-  useTexture.preload(`/textures/${page.back}.jpg`);
-  useTexture.preload(`/textures/book-cover-roughness.jpg`);
+  useLoader.preload(CompositeTextureLoader, `/textures/${page.front}.jpg`);
+  useLoader.preload(CompositeTextureLoader, `/textures/${page.back}.jpg`);
+  useLoader.preload(CompositeTextureLoader, `/textures/book-cover-roughness.jpg`);
 });
 
 const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
-  const [picture, picture2, pictureRoughness] = useTexture([
-    `/textures/${front}.jpg`,
-    `/textures/${back}.jpg`,
-    ...(number === 0 || number === pages.length - 1
-      ? [`/textures/book-cover-roughness.jpg`]
-      : []),
-  ]);
+  const [picture, picture2, pictureRoughness] = useLoader(
+    CompositeTextureLoader,
+    [
+      `/textures/${front}.jpg`,
+      `/textures/${back}.jpg`,
+      ...(number === 0 || number === pages.length - 1
+        ? [`/textures/book-cover-roughness.jpg`]
+        : []),
+    ]
+  );
   picture.colorSpace = picture2.colorSpace = SRGBColorSpace;
   const group = useRef();
   const turnedAt = useRef(0);
