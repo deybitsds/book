@@ -10,9 +10,9 @@ import { useEffect } from "react";
 //   - cara_1.jpg ... cara_N.jpg (imagen base de cada página)
 //   - test_1.png ... test_N.png (overlay de cada página)
 //
-// Para agregar páginas, copia archivos existentes:
-//   cd public/textures && for i in {17..20}; do cp cara_1.jpg "cara_$i.jpg"; cp test_1.png "test_$i.png"; done
-const NUM_PAGES = 16;
+// Debe coincidir con el número más alto de cara_N / test_N que tengas (cara_22 → NUM_PAGES = 22).
+// Para agregar más: sube los .jpg/.png y aumenta este número (siempre par).
+const NUM_PAGES = 22;
 
 if (NUM_PAGES % 2 !== 0) {
   throw new Error(

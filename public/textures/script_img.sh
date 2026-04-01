@@ -4,7 +4,7 @@
 TARGET_WIDTH=1365
 TARGET_HEIGHT=2048
 # 0 = toca los bordes, 5 = un pequeño aire alrededor, 10 = margen notable
-MARGIN_PERCENT=7
+MARGIN_PERCENT=11
 # ---------------------
 
 # Dependencia: sudo pacman -S imagemagick bc
