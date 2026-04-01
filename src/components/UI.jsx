@@ -1,5 +1,6 @@
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { publicUrl } from "../publicUrl";
 
 // ========== CONFIGURACIÓN MODULAR ==========
 // Cambia NUM_PAGES para agregar o quitar páginas.
@@ -25,6 +26,9 @@ const pictures = Array.from({ length: NUM_PAGES }, (_, i) => `cara_${i + 1}`);
 
 // Estructura del libro: portada, páginas interiores, contraportada
 export const pageAtom = atom(0);
+
+/** Cada clic en Acercar/Alejar incrementa `n`; `dir` es 1 = acercar, -1 = alejar. */
+export const zoomPulseAtom = atom({ n: 0, dir: 1 });
 export const pages = [
   { front: "book-cover", back: pictures[0] },
   ...Array.from({ length: (NUM_PAGES - 2) / 2 }, (_, i) => ({
@@ -35,12 +39,34 @@ export const pages = [
 ];
 
 export const UI = () => {
-  const [page, setPage] = useAtom(pageAtom);
+  const [page] = useAtom(pageAtom);
+  const setZoomPulse = useSetAtom(zoomPulseAtom);
 
   useEffect(() => {
-    const audio = new Audio("/audios/page-flip-01a.mp3");
+    const audio = new Audio(publicUrl("/audios/page-flip-01a.mp3"));
     audio.play();
   }, [page]);
 
-  return null;
+  return (
+    <div className="zoom-controls" role="group" aria-label="Zoom de la vista">
+      <button
+        type="button"
+        className="zoom-btn"
+        onClick={() =>
+          setZoomPulse((p) => ({ n: p.n + 1, dir: 1 }))
+        }
+      >
+        Acercar
+      </button>
+      <button
+        type="button"
+        className="zoom-btn"
+        onClick={() =>
+          setZoomPulse((p) => ({ n: p.n + 1, dir: -1 }))
+        }
+      >
+        Alejar
+      </button>
+    </div>
+  );
 };

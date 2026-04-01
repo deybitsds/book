@@ -19,6 +19,7 @@ import {
 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { CompositeTextureLoader } from "../loaders/CompositeTextureLoader";
+import { publicUrl } from "../publicUrl";
 import { pageAtom, pages } from "./UI";
 
 const easingFactor = 0.5; // Controls the speed of the easing
@@ -89,19 +90,28 @@ const pageMaterials = [
 ];
 
 pages.forEach((page) => {
-  useLoader.preload(CompositeTextureLoader, `/textures/${page.front}.jpg`);
-  useLoader.preload(CompositeTextureLoader, `/textures/${page.back}.jpg`);
-  useLoader.preload(CompositeTextureLoader, `/textures/book-cover-roughness.jpg`);
+  useLoader.preload(
+    CompositeTextureLoader,
+    publicUrl(`/textures/${page.front}.jpg`)
+  );
+  useLoader.preload(
+    CompositeTextureLoader,
+    publicUrl(`/textures/${page.back}.jpg`)
+  );
+  useLoader.preload(
+    CompositeTextureLoader,
+    publicUrl("/textures/book-cover-roughness.jpg")
+  );
 });
 
 const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
   const [picture, picture2, pictureRoughness] = useLoader(
     CompositeTextureLoader,
     [
-      `/textures/${front}.jpg`,
-      `/textures/${back}.jpg`,
+      publicUrl(`/textures/${front}.jpg`),
+      publicUrl(`/textures/${back}.jpg`),
       ...(number === 0 || number === pages.length - 1
-        ? [`/textures/book-cover-roughness.jpg`]
+        ? [publicUrl("/textures/book-cover-roughness.jpg")]
         : []),
     ]
   );

@@ -1,8 +1,43 @@
 import { Environment, OrbitControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useAtomValue } from "jotai";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { Book } from "./Book";
+import { zoomPulseAtom } from "./UI";
+
+const bookTarget = new THREE.Vector3(0, 0.12, 0);
+/** Por cada clic: acercar ~6%, alejar ~6% (inverso). */
+const DOLLY_IN_FACTOR = 0.94;
+const DOLLY_OUT_FACTOR = 1 / DOLLY_IN_FACTOR;
+const MIN_CAMERA_DISTANCE = 0.72;
+const MAX_CAMERA_DISTANCE = 200;
+
+function CameraZoom() {
+  const pulse = useAtomValue(zoomPulseAtom);
+  const { camera } = useThree();
+  const prevN = useRef(0);
+
+  useEffect(() => {
+    if (pulse.n === prevN.current) return;
+    prevN.current = pulse.n;
+
+    const offset = camera.position.clone().sub(bookTarget);
+    const dist = offset.length();
+    if (dist < 1e-5) return;
+
+    const factor = pulse.dir > 0 ? DOLLY_IN_FACTOR : DOLLY_OUT_FACTOR;
+    const newDist = THREE.MathUtils.clamp(
+      dist * factor,
+      MIN_CAMERA_DISTANCE,
+      MAX_CAMERA_DISTANCE
+    );
+    offset.normalize().multiplyScalar(newDist);
+    camera.position.copy(bookTarget).add(offset);
+  }, [pulse.n, pulse.dir, camera]);
+
+  return null;
+}
 
 /** Igual que el Float de drei para el eje Y; rotación más lenta para poder leer en reposo. */
 const FLOAT_SPEED = 1;
@@ -49,6 +84,7 @@ export const Experience = () => {
       <BookIdleMotion>
         <Book />
       </BookIdleMotion>
+      <CameraZoom />
       <OrbitControls />
       <Environment preset="studio"></Environment>
       <directionalLight
