@@ -17,26 +17,34 @@ class CompositeTextureLoader extends Loader {
   }
 
   load(url, onLoad, onProgress, onError) {
-    const caraMatch = url.match(/cara_(\d+)(\.jpg)?$/);
-    const coverMatch = url.match(/book-cover(\.jpg)?$/);
+  // 1. Regex mejorada: busca "cara_" seguido de números en cualquier parte del nombre del archivo
+  const caraMatch = url.match(/cara_(\d+)/);
+  const coverMatch = url.match(/book-cover/);
 
-    if (caraMatch) {
-      const num = caraMatch[1];
-      const baseUrl = url.replace(/\/[^/]+$/, `/cara_${num}.jpg`);
-      const overlayUrl = url.replace(/\/[^/]+$/, `/test_${num}.png`);
-      this._composite(baseUrl, overlayUrl, onLoad, onError);
-      return;
-    }
-
-    if (coverMatch) {
-      const baseUrl = url.replace(/\/[^/]+$/, "/book-cover.jpg");
-      const overlayUrl = url.replace(/\/[^/]+$/, "/test_cover.png");
-      this._composite(baseUrl, overlayUrl, onLoad, onError);
-      return;
-    }
-
-    return this.textureLoader.load(url, onLoad, onProgress, onError);
+  if (caraMatch) {
+    const num = caraMatch[1];
+    // 2. Usamos el objeto URL para manipular rutas de forma segura
+    // Esto evita errores si la URL tiene parámetros o rutas complejas
+    const basePath = url.substring(0, url.lastIndexOf('/') + 1);
+    
+    const baseUrl = `${basePath}cara_${num}.jpg`;
+    const overlayUrl = `${basePath}test_${num}.png`;
+    
+    this._composite(baseUrl, overlayUrl, onLoad, onError);
+    return;
   }
+
+  if (coverMatch) {
+    const basePath = url.substring(0, url.lastIndexOf('/') + 1);
+    const baseUrl = `${basePath}book-cover.jpg`;
+    const overlayUrl = `${basePath}test_cover.png`;
+    
+    this._composite(baseUrl, overlayUrl, onLoad, onError);
+    return;
+  }
+
+  return this.textureLoader.load(url, onLoad, onProgress, onError);
+}
 
   _composite(baseUrl, overlayUrl, onLoad, onError) {
     this._loadImage(baseUrl)
